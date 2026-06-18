@@ -61,8 +61,6 @@ public class _CardGameManager : MonoBehaviour
         (5, 5)
     };
 
-    private InputField seedInputField;
-    private GameObject resumeButtonGO;
     private string[] savedCardStates;
     private List<int> faceUpCardIndices = new List<int>();
 
@@ -93,12 +91,12 @@ public class _CardGameManager : MonoBehaviour
         }
 
         SetGameSize();
-        CreateDynamicUIComponents();
-    }    private void CreateDynamicUIComponents()
+        ConfigureStartButton();
+    }    private void ConfigureStartButton()
     {
         if (info == null) return;
 
-        // Find existing components to match position/hierarchy if possible
+        // Find Start button in Menu panel
         Button startButton = null;
         Button[] buttons = info.GetComponentsInChildren<Button>(true);
         foreach (var btn in buttons)
@@ -110,120 +108,40 @@ public class _CardGameManager : MonoBehaviour
             }
         }
 
-        // 1. Create SEED Label and Input Field
-        GameObject seedLabelGO = new GameObject("SeedLabel", typeof(RectTransform), typeof(Text));
-        seedLabelGO.transform.SetParent(info.transform, false);
-        RectTransform labelRect = seedLabelGO.GetComponent<RectTransform>();
-        labelRect.sizeDelta = new Vector2(300f, 30f);
-        
-        Text labelText = seedLabelGO.GetComponent<Text>();
-        labelText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        labelText.color = new Color(1f, 0.75f, 0f, 1f); // Gold/Orange matching UI
-        labelText.text = "CUSTOM SHUFFLE SEED";
-        labelText.alignment = TextAnchor.MiddleCenter;
-        labelText.fontStyle = FontStyle.Bold;
-        labelText.fontSize = 14;
-
-        GameObject seedInputGO = new GameObject("SeedInputField", typeof(RectTransform), typeof(Image), typeof(InputField));
-        seedInputGO.transform.SetParent(info.transform, false);
-        RectTransform inputRect = seedInputGO.GetComponent<RectTransform>();
-        inputRect.sizeDelta = new Vector2(200f, 40f);
-
-        seedInputGO.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.15f);
-
-        GameObject textGO = new GameObject("Text", typeof(RectTransform), typeof(Text));
-        textGO.transform.SetParent(seedInputGO.transform, false);
-        RectTransform textRect = textGO.GetComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.sizeDelta = Vector2.zero;
-        textRect.offsetMin = new Vector2(10, 5);
-        textRect.offsetMax = new Vector2(-10, -5);
-
-        Text textComp = textGO.GetComponent<Text>();
-        textComp.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        textComp.color = Color.white;
-        textComp.alignment = TextAnchor.MiddleLeft;
-        textComp.fontSize = 18;
-
-        GameObject placeholderGO = new GameObject("Placeholder", typeof(RectTransform), typeof(Text));
-        placeholderGO.transform.SetParent(seedInputGO.transform, false);
-        RectTransform placeholderRect = placeholderGO.GetComponent<RectTransform>();
-        placeholderRect.anchorMin = Vector2.zero;
-        placeholderRect.anchorMax = Vector2.one;
-        placeholderRect.sizeDelta = Vector2.zero;
-        placeholderRect.offsetMin = new Vector2(10, 5);
-        placeholderRect.offsetMax = new Vector2(-10, -5);
-
-        Text placeholderComp = placeholderGO.GetComponent<Text>();
-        placeholderComp.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        placeholderComp.color = new Color(1f, 1f, 1f, 0.4f);
-        placeholderComp.text = "Enter Seed...";
-        placeholderComp.alignment = TextAnchor.MiddleLeft;
-        placeholderComp.fontSize = 18;
-
-        seedInputField = seedInputGO.GetComponent<InputField>();
-        seedInputField.textComponent = textComp;
-        seedInputField.placeholder = placeholderComp;
-        seedInputField.targetGraphic = seedInputGO.GetComponent<Image>();
-
-        // 2. Create RESUME Game Button
-        resumeButtonGO = new GameObject("ResumeButton", typeof(RectTransform), typeof(Image), typeof(Button));
-        resumeButtonGO.transform.SetParent(info.transform, false);
-        RectTransform resumeRect = resumeButtonGO.GetComponent<RectTransform>();
-        resumeRect.sizeDelta = new Vector2(160f, 40f);
-
-        resumeButtonGO.GetComponent<Image>().color = new Color(0.2f, 0.7f, 0.3f, 1f); // Green
-
-        GameObject resumeTextGO = new GameObject("Text", typeof(RectTransform), typeof(Text));
-        resumeTextGO.transform.SetParent(resumeButtonGO.transform, false);
-        RectTransform resumeTextRect = resumeTextGO.GetComponent<RectTransform>();
-        resumeTextRect.anchorMin = Vector2.zero;
-        resumeTextRect.anchorMax = Vector2.one;
-        resumeTextRect.sizeDelta = Vector2.zero;
-
-        Text resumeText = resumeTextGO.GetComponent<Text>();
-        resumeText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        resumeText.text = "RESUME GAME";
-        resumeText.color = Color.white;
-        resumeText.alignment = TextAnchor.MiddleCenter;
-        resumeText.fontStyle = FontStyle.Bold;
-        resumeText.fontSize = 16;
-
-        Button resumeBtn = resumeButtonGO.GetComponent<Button>();
-        resumeBtn.onClick.AddListener(ResumeCardGame);
-
-        // Position positioning dynamically based on the startButton
         if (startButton != null)
         {
-            RectTransform startRect = startButton.GetComponent<RectTransform>();
-            Vector2 startPos = startRect.anchoredPosition;
+            // Bind click to conditionally Resume or Start fresh
+            startButton.onClick.RemoveAllListeners();
+            startButton.onClick.AddListener(() =>
+            {
+                bool hasSave = PlayerPrefs.HasKey("SaveGame") && 
+                               JsonUtility.FromJson<GameSaveData>(PlayerPrefs.GetString("SaveGame")).hasSavedGame;
+                if (hasSave)
+                {
+                    ResumeCardGame();
+                }
+                else
+                {
+                    StartCardGame();
+                }
+            });
 
-            // Place Resume button directly above Start button
-            resumeRect.anchoredPosition = new Vector2(startPos.x, startPos.y + 60f);
-            
-            // Place Seed Label and Seed Input below the Start button
-            labelRect.anchoredPosition = new Vector2(startPos.x, startPos.y - 70f);
-            inputRect.anchoredPosition = new Vector2(startPos.x, startPos.y - 105f);
-        }
-        else
-        {
-            // Fallback hardcoded values if start button is not found
-            resumeRect.anchoredPosition = new Vector2(0f, -150f);
-            labelRect.anchoredPosition = new Vector2(0f, -220f);
-            inputRect.anchoredPosition = new Vector2(0f, -260f);
-        }
+            // Update its text label
+            bool saveExists = PlayerPrefs.HasKey("SaveGame") && 
+                              JsonUtility.FromJson<GameSaveData>(PlayerPrefs.GetString("SaveGame")).hasSavedGame;
+            TMP_Text tmpText = startButton.GetComponentInChildren<TMP_Text>();
+            Text legacyText = startButton.GetComponentInChildren<Text>();
 
-        UpdateResumeButtonVisibility();
-    }
-
-    private void UpdateResumeButtonVisibility()
-    {
-        if (resumeButtonGO != null)
-        {
-            bool hasSave = PlayerPrefs.HasKey("SaveGame") && 
-                           JsonUtility.FromJson<GameSaveData>(PlayerPrefs.GetString("SaveGame")).hasSavedGame;
-            resumeButtonGO.SetActive(hasSave);
+            if (saveExists)
+            {
+                if (tmpText != null) tmpText.text = "RESUME GAME";
+                else if (legacyText != null) legacyText.text = "RESUME GAME";
+            }
+            else
+            {
+                if (tmpText != null) tmpText.text = "START GAME";
+                else if (legacyText != null) legacyText.text = "START GAME";
+            }
         }
     }
 
@@ -234,19 +152,8 @@ public class _CardGameManager : MonoBehaviour
         if (winPanel != null) winPanel.SetActive(false);
         panel.SetActive(true);
 
-        // Determine seed: input seed, or generate a random one
+        // Generate a random seed
         int seed = UnityEngine.Random.Range(10000, 99999);
-        if (seedInputField != null && !string.IsNullOrEmpty(seedInputField.text))
-        {
-            if (int.TryParse(seedInputField.text, out int customSeed))
-            {
-                seed = customSeed;
-            }
-            else
-            {
-                seed = seedInputField.text.GetHashCode();
-            }
-        }
 
         // Selected layout configuration
         int layoutIndex = Mathf.Clamp((int)sizeSlider.value, 0, layouts.Length - 1);
@@ -453,7 +360,7 @@ public class _CardGameManager : MonoBehaviour
 
         panel.SetActive(false);
         info.SetActive(true);
-        UpdateResumeButtonVisibility();
+        ConfigureStartButton();
     }
 
     public void RestartGame()
@@ -476,7 +383,7 @@ public class _CardGameManager : MonoBehaviour
             winPanel.SetActive(false);
 
         info.SetActive(true);
-        UpdateResumeButtonVisibility();
+        ConfigureStartButton();
     }
 
     public void SetGameSize()
@@ -582,7 +489,7 @@ public class _CardGameManager : MonoBehaviour
         PlayerPrefs.SetString("SaveGame", json);
         PlayerPrefs.Save();
 
-        UpdateResumeButtonVisibility();
+        ConfigureStartButton();
     }
 
     public void ResumeCardGame()
@@ -626,7 +533,7 @@ public class _CardGameManager : MonoBehaviour
             PlayerPrefs.SetString("SaveGame", JsonUtility.ToJson(data));
             PlayerPrefs.Save();
         }
-        UpdateResumeButtonVisibility();
+        ConfigureStartButton();
     }
 
     private void OnApplicationPause(bool pauseStatus)
