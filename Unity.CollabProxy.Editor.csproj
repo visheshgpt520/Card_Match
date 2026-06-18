@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{763FDDC8-540C-A1E3-EA9C-B744D95DCB2F}</ProjectGuid>
+    <ProjectGuid>{CA903C49-257E-0867-B203-71C41C4B9442}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.CollabProxy.Editor</AssemblyName>
@@ -425,6 +425,14 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TextMateSharpPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TextMateSharpPlastic.Grammars">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.Grammars.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
@@ -433,12 +441,12 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.2.6\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\unityplastic.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OnigwrapPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\Onigwrap\OnigwrapPlastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
@@ -453,24 +461,16 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\unityplastic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="TextMateSharpPlastic.Grammars">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.Grammars.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="OnigwrapPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\Onigwrap\OnigwrapPlastic.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="TextMateSharpPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -1000,23 +1000,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{E15C4658-C829-7A42-E6E7-DC0D6A050986}</Project>
+      <Project>{1618B7CB-BAAE-BCF1-5702-9902D4DE806F}</Project>
       <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{0D80291A-4823-1EA8-FBD4-752DDFBD403C}</Project>
+      <Project>{A901F050-2801-380C-092B-C12D60D7C662}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{41B0C9BE-65C1-3070-C901-35F12EEE5DD7}</Project>
+      <Project>{EE504420-7E11-5334-CDA1-6E7DBFA14FD7}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{87BBD68F-258C-B365-6A43-61D4551A7955}</Project>
+      <Project>{62864EEE-4BE0-9F82-7B89-2580F3A64BA6}</Project>
       <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
-      <Project>{FA1D2829-4FF1-8F38-F533-72753ED0D66A}</Project>
+      <Project>{431635FB-743F-F3DE-587D-E0B85E8A67A9}</Project>
       <Name>UnityEditor.TestRunner</Name>
     </ProjectReference>
   </ItemGroup>

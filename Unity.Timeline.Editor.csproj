@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{887AEC37-ED29-9F30-63E6-060855197E09}</ProjectGuid>
+    <ProjectGuid>{D2AFA4A1-1005-B3D8-BC1F-5FC42E7AEBC4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.Timeline.Editor</AssemblyName>
@@ -161,8 +161,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\DirectorNamedColor.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Animation\TimelineAnimationUtilities.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Utilities\TimeFormat.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Animation\AnimationClipActions.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\TimelineHelpers.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Animation\AnimationClipActions.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\ManipulationsTracks.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Items\ItemsGroup.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Actions\MarkerActions.cs" />
@@ -187,10 +187,10 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\Drawers\InfiniteTrackDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Utilities\KeyTraverser.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Manipulators\Trim\TrimItemModeRipple.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Window\TimelineWindow_HeaderGui.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\ManipulationsClips.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Animation\AnimationClipCurveCache.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Window\ViewModel\ScriptableObjectViewPrefs.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Window\TimelineWindow_HeaderGui.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Utilities\Scopes\IndentLevelScope.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Undo\UndoExtensions.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Extensions\AnimationTrackExtensions.cs" />
@@ -214,10 +214,10 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\CustomEditors\MarkerEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Items\ItemsUtils.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\inspectors\TimelinePreferences.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Actions\IAction.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\ItemGui\TimelineMarkerGUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Actions\TimelineAction.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Window\TimelineWindow_TimeArea.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Actions\IAction.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\TrackGui\TimelineTrackGUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\Animation\CurvesProxy.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.7.7\Editor\treeview\Drawers\Layers\MarkersLayer.cs" />
@@ -698,6 +698,14 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TextMateSharpPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TextMateSharpPlastic.Grammars">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.Grammars.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
@@ -706,24 +714,28 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.2.6\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\unityplastic.dll</HintPath>
+    <Reference Include="Unity.Plastic.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+    <Reference Include="OnigwrapPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\Onigwrap\OnigwrapPlastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\log4netPlastic.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\log4netPlastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\unityplastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
@@ -1261,23 +1273,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{51DDFB5C-7D2F-06EB-957B-F7173358F773}</Project>
+      <Project>{040AAF47-0F90-1BCF-F15D-D377E1F963B2}</Project>
       <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{0D80291A-4823-1EA8-FBD4-752DDFBD403C}</Project>
+      <Project>{A901F050-2801-380C-092B-C12D60D7C662}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{41B0C9BE-65C1-3070-C901-35F12EEE5DD7}</Project>
+      <Project>{EE504420-7E11-5334-CDA1-6E7DBFA14FD7}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{87BBD68F-258C-B365-6A43-61D4551A7955}</Project>
+      <Project>{62864EEE-4BE0-9F82-7B89-2580F3A64BA6}</Project>
       <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
-      <Project>{FA1D2829-4FF1-8F38-F533-72753ED0D66A}</Project>
+      <Project>{431635FB-743F-F3DE-587D-E0B85E8A67A9}</Project>
       <Name>UnityEditor.TestRunner</Name>
     </ProjectReference>
   </ItemGroup>

@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{EDEA53E9-7DD5-4EFD-5D8F-4BAC82293974}</ProjectGuid>
+    <ProjectGuid>{25114FCA-3B21-0BE6-0BA6-277E170B118E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>UnityEngine.TestRunner</AssemblyName>
@@ -98,8 +98,8 @@
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\Utils\AssemblyProvider\IScriptingRuntimeProxy.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\TestRunner\RemoteHelpers\RemoteTestResultDataFactory.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\TestRunner\Callbacks\PlayerQuitHandler.cs" />
-    <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\Utils\IPostBuildCleanup.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\NUnitExtensions\Commands\EnumerableRetryTestCommand.cs" />
+    <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\Utils\IPostBuildCleanup.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\NUnitExtensions\Attributes\UnityTestAttribute.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\Assertions\LogScope\LogScope.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\Assertions\LogAssert.cs" />
