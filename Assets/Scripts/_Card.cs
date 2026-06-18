@@ -1,250 +1,119 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum CardState
-{
-    FaceDown,
-    FlippingUp,
-    FaceUp,
-    FlippingDown,
-    Matched
-}
-
 public class _Card : MonoBehaviour
 {
-    [SerializeField] private Image img;
 
-    public int SpriteID { get; set; }
-    public int ID { get; set; }
-    public CardState State { get; private set; } = CardState.FaceDown;
+    private int spriteID;
+    private int id;
+    private bool flipped;
+    private bool turning;
+    [SerializeField]
+    private Image img;
 
-    private Coroutine activeAnimation;
-
-    public void Initialize(int id, int spriteID, Sprite backSprite)
+    // flip card animation
+    // if changeSprite specified, will 90 degree, change to back/front sprite before flipping another 90 degree
+    private IEnumerator Flip90(Transform thisTransform, float time, bool changeSprite)
     {
-        ID = id;
-        SpriteID = spriteID;
-        
-        if (img != null)
+        Quaternion startRotation = thisTransform.rotation;
+        Quaternion endRotation = thisTransform.rotation * Quaternion.Euler(new Vector3(0, 90, 0));
+        float rate = 1.0f / time;
+        float t = 0.0f;
+        while (t < 1.0f)
         {
-            img.sprite = backSprite;
-            img.color = Color.white;
+            t += Time.deltaTime * rate;
+            thisTransform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+
+            yield return null;
         }
-
-        transform.rotation = Quaternion.Euler(0, 180, 0); // start face down
-        State = CardState.FaceDown;
-        gameObject.SetActive(true);
-
-        if (activeAnimation != null)
+        //change sprite and flip another 90degree
+        if (changeSprite)
         {
-            StopCoroutine(activeAnimation);
-            activeAnimation = null;
-        }
-    }
-
-    public void RestoreState(CardState state, int spriteID, Sprite sprite)
-    {
-        this.SpriteID = spriteID;
-        this.State = state;
-
-        if (activeAnimation != null)
-        {
-            StopCoroutine(activeAnimation);
-            activeAnimation = null;
-        }
-
-        if (state == CardState.Matched)
-        {
-            if (img != null)
-            {
-                img.color = Color.clear;
-            }
-            gameObject.SetActive(false);
-        }
-        else if (state == CardState.FaceUp)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            if (img != null)
-            {
-                img.sprite = sprite;
-                img.color = Color.white;
-            }
-            gameObject.SetActive(true);
+            flipped = !flipped;
+            ChangeSprite();
+            StartCoroutine(Flip90(transform, time, false));
         }
         else
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-            if (img != null)
-            {
-                img.sprite = _CardGameManager.Instance.CardBack();
-                img.color = Color.white;
-            }
-            gameObject.SetActive(true);
-        }
+            turning = false;
     }
-
-    // Called by the Button component onClick event in Unity
-    public void CardBtn()
-    {
-        if (State != CardState.FaceDown) return;
-        if (!_CardGameManager.Instance.canClick()) return;
-
-        FlipUp();
-        _CardGameManager.Instance.CardClicked(ID);
-    }
-
-    public void FlipUp()
-    {
-        State = CardState.FlippingUp;
-        if (activeAnimation != null) StopCoroutine(activeAnimation);
-        activeAnimation = StartCoroutine(FlipCoroutine(0.25f, true));
-    }
-
-    public void AnimateMatch()
-    {
-        State = CardState.Matched;
-        if (activeAnimation != null) StopCoroutine(activeAnimation);
-        activeAnimation = StartCoroutine(MatchCoroutine());
-    }
-
-    public void AnimateMismatch()
-    {
-        State = CardState.FlippingDown;
-        if (activeAnimation != null) StopCoroutine(activeAnimation);
-        activeAnimation = StartCoroutine(FlipCoroutine(0.25f, false));
-    }
-
-    // Compatibility method for the original manager if called
+    // perform a 180 degree flip
     public void Flip()
     {
-        if (State == CardState.FaceDown || State == CardState.FlippingDown)
-        {
-            FlipUp();
-        }
-        else if (State == CardState.FaceUp || State == CardState.FlippingUp)
-        {
-            AnimateMismatch();
-        }
+        turning = true;
+        AudioPlayer.Instance.PlayAudio(0);
+        StartCoroutine(Flip90(transform, 0.25f, true));
     }
-
-    // Compatibility method for original manager fade out
+    // toggle front/back sprite
+    private void ChangeSprite()
+    {
+        if (spriteID == -1 || img == null) return;
+        if (flipped)
+            img.sprite = _CardGameManager.Instance.GetSprite(spriteID);
+        else
+            img.sprite = _CardGameManager.Instance.CardBack();
+    }
+    // call fade animation
     public void Inactive()
     {
-        AnimateMatch();
+        StartCoroutine(Fade());
     }
+    // play fade animation by changing alpha of img's color
+    private IEnumerator Fade()
+    {
+        float rate = 1.0f / 2.5f;
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime * rate;
+            img.color = Color.Lerp(img.color, Color.clear, t);
 
-    // Compatibility method for original manager
+            yield return null;
+        }
+    }
+    // set card to be active color
     public void Active()
     {
-        if (img != null)
+        if (img)
             img.color = Color.white;
     }
-
-    // Compatibility method for original manager
+    // spriteID getter and setter
+    public int SpriteID
+    {
+        set
+        {
+            spriteID = value;
+            flipped = true;
+            ChangeSprite();
+        }
+        get { return spriteID; }
+    }
+    // card ID getter and setter
+    public int ID
+    {
+        set { id = value; }
+        get { return id; }
+    }
+    // reset card default rotation
     public void ResetRotation()
     {
         transform.rotation = Quaternion.Euler(0, 180, 0);
-        State = CardState.FaceDown;
-        if (img != null)
-        {
-            img.sprite = _CardGameManager.Instance.CardBack();
-            img.color = Color.white;
-        }
+        flipped = true;
+        ChangeSprite();
     }
-
-    private IEnumerator FlipCoroutine(float duration, bool flipUp)
+    // card onclick event
+    public void CardBtn()
     {
-        // Play click/flip sound with slight pitch variation (1.0 for flip up, 0.8 for flip down)
-        if (AudioPlayer.Instance != null)
-        {
-            AudioPlayer.Instance.PlayAudio(0, 0.8f, flipUp ? 1.0f : 0.8f);
-        }
-
-        float startY = transform.rotation.eulerAngles.y;
-        float targetY = flipUp ? 0f : 180f;
-
-        // Ensure we rotate correctly around the closest Y direction
-        if (Mathf.Abs(startY - targetY) > 180f)
-        {
-            if (startY > targetY) startY -= 360f;
-            else targetY -= 360f;
-        }
-
-        float elapsed = 0f;
-        bool spriteChanged = false;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-            float smoothT = Mathf.SmoothStep(0f, 1f, t);
-            float currentY = Mathf.Lerp(startY, targetY, smoothT);
-            transform.rotation = Quaternion.Euler(0, currentY, 0);
-
-            // Swap the sprite exactly halfway through the flip (at 90 degrees)
-            if (!spriteChanged && t >= 0.5f)
-            {
-                spriteChanged = true;
-                if (img != null)
-                {
-                    if (flipUp)
-                        img.sprite = _CardGameManager.Instance.GetSprite(SpriteID);
-                    else
-                        img.sprite = _CardGameManager.Instance.CardBack();
-                }
-            }
-
-            yield return null;
-        }
-
-        transform.rotation = Quaternion.Euler(0, targetY, 0);
-        State = flipUp ? CardState.FaceUp : CardState.FaceDown;
-        activeAnimation = null;
+        if (flipped || turning) return;
+        if (!_CardGameManager.Instance.canClick()) return;
+        Flip();
+        StartCoroutine(SelectionEvent());
     }
-
-    private IEnumerator MatchCoroutine()
+    // inform manager card is selected with a slight delay
+    private IEnumerator SelectionEvent()
     {
-        // Play success audio pitch-shifted higher
-        if (AudioPlayer.Instance != null)
-        {
-            AudioPlayer.Instance.PlayAudio(0, 0.9f, 1.4f);
-        }
-
-        Vector3 originalScale = transform.localScale;
-        
-        // Pop scaling effect (scale up to 1.15x then back)
-        float popDuration = 0.15f;
-        float elapsed = 0f;
-        while (elapsed < popDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / popDuration;
-            // Pop out and back using a sine wave
-            transform.localScale = originalScale * (1.0f + 0.15f * Mathf.Sin(t * Mathf.PI));
-            yield return null;
-        }
-        transform.localScale = originalScale;
-
-        // Smooth fade out
-        float fadeDuration = 0.4f;
-        elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / fadeDuration;
-            if (img != null)
-            {
-                img.color = Color.Lerp(Color.white, Color.clear, t);
-            }
-            yield return null;
-        }
-
-        if (img != null)
-        {
-            img.color = Color.clear;
-        }
-        gameObject.SetActive(false);
-        activeAnimation = null;
+        yield return new WaitForSeconds(0.5f);
+        _CardGameManager.Instance.cardClicked(spriteID, id);
     }
 }
